@@ -19,7 +19,7 @@ builder.Services.AddHttpClient("FundaApiClient", (serviceProvider, client) =>
 
 builder.Services.AddSingleton<IFundaApiClient, FundaApiClient>();
 
-builder.Services.AddScoped<IRentalPropertyService, RentalPropertyService>();
+builder.Services.AddScoped<IRealEstateUnitService, RealEstateUnitService>();
 
 var app = builder.Build();
 

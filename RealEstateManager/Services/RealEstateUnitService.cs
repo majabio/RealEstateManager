@@ -2,11 +2,11 @@ using RealEstateManager.Infrastructure;
 
 namespace RealEstateManager.Services;
 
-public class RentalPropertyService : IRentalPropertyService
+public class RealEstateUnitService : IRealEstateUnitService
 {
     private readonly IFundaApiClient _fundaApiClient;
 
-    public RentalPropertyService(IFundaApiClient fundaApiClient)
+    public RealEstateUnitService(IFundaApiClient fundaApiClient)
     {
         _fundaApiClient = fundaApiClient;
     }

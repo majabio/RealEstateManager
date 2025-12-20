@@ -2,10 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace RealEstateManager.Models;
 
-public class RentalPropertyResponse
+public class RealEstateUnitResponse
 {
     [JsonPropertyName("Objects")]
-    public ObjectResponse[]? RentalProperties { get; set; } 
+    public ObjectResponse[]? RealEstateUnits { get; set; } 
     [JsonPropertyName("Paging")]
     public PaginationResponse? Pagination { get; set; }
 }

@@ -5,13 +5,13 @@ namespace RealEstateManager.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RentalPropertyController : ControllerBase
+public class RealEstateUnitController : ControllerBase
 {
-    private readonly IRentalPropertyService _rentalPropertyService;
+    private readonly IRealEstateUnitService _realEstateUnitService;
 
-    public RentalPropertyController(IRentalPropertyService rentalPropertyService)
+    public RealEstateUnitController(IRealEstateUnitService realEstateUnitService)
     {
-        _rentalPropertyService = rentalPropertyService;
+        _realEstateUnitService = realEstateUnitService;
     }
 
     [HttpGet("{city}")]
@@ -19,7 +19,7 @@ public class RentalPropertyController : ControllerBase
     {
         try
         {
-            var result = await _rentalPropertyService.GetRentalPropertiesCountPerAgencyAsync(city);
+            var result = await _realEstateUnitService.GetRentalPropertiesCountPerAgencyAsync(city);
             return Ok(result);
         }
         catch (Exception ex)

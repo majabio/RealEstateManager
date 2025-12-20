@@ -30,7 +30,7 @@ public class FundaApiClient : IFundaApiClient
         return result;
     }
     
-    private async Task<RentalPropertyResponse> FetchPageAsync(string endpoint, int page)
+    private async Task<RealEstateUnitResponse> FetchPageAsync(string endpoint, int page)
     {
         try
         {
@@ -38,8 +38,8 @@ public class FundaApiClient : IFundaApiClient
             
             var response = await httpClient.GetAsync($"{endpoint}&page={page}/");
         
-            var rentalPropertyResponse = await response.Content.ReadFromJsonAsync<RentalPropertyResponse>();
-            return rentalPropertyResponse ?? new RentalPropertyResponse();
+            var rentalPropertyResponse = await response.Content.ReadFromJsonAsync<RealEstateUnitResponse>();
+            return rentalPropertyResponse ?? new RealEstateUnitResponse();
         }
         catch (Exception ex)
         {

@@ -1,3 +1,3 @@
 namespace RealEstateManager.Models;
 
-public record RentalProperty();
+public record RealEstateUnit();
