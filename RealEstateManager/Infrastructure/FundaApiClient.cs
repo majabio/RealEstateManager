@@ -1,22 +1,26 @@
+using System.Text.Json;
+using System.Threading.RateLimiting;
 using RealEstateManager.Models;
 
 namespace RealEstateManager.Infrastructure;
 
 public class FundaApiClient : IFundaApiClient
 {
-    private readonly IHttpClientFactory _httpClientFactory;
     private const string FundaClientName = nameof(FundaApiClient);
-    
-    public FundaApiClient(IHttpClientFactory httpClientFactory)
+    private readonly HttpClient _httpClient;
+    private readonly ApiRateLimiter _rateLimiter;
+
+    public FundaApiClient(IHttpClientFactory httpClientFactory, ApiRateLimiter rateLimiter)
     {
-        _httpClientFactory = httpClientFactory;
+        _rateLimiter = rateLimiter;
+        _httpClient = httpClientFactory.CreateClient(FundaClientName);
     }
     
     public async Task<IDictionary<uint, uint>> GetRentalPropertiesCountPerAgencyAsync(string city)
     {
         var endpoint = $"/feeds/Aanbod.svc/json/76666a29898f491480386d966b75f949/?type=koop&zo=/{city}/";
         var result = new Dictionary<uint, uint>();
-        var currentPage = 1;
+        var currentPage = 10;
         var hasMorePages = true;
 
         while (hasMorePages)
@@ -32,11 +36,11 @@ public class FundaApiClient : IFundaApiClient
     
     private async Task<RealEstateUnitResponse> FetchPageAsync(string endpoint, int page)
     {
+        await _rateLimiter.WaitAsync();
+        
         try
         {
-            var httpClient = _httpClientFactory.CreateClient(FundaClientName);
-            
-            var response = await httpClient.GetAsync($"{endpoint}&page={page}/");
+            var response = await _httpClient.GetAsync($"{endpoint}&page={page}/");
         
             var rentalPropertyResponse = await response.Content.ReadFromJsonAsync<RealEstateUnitResponse>();
             return rentalPropertyResponse ?? new RealEstateUnitResponse();
