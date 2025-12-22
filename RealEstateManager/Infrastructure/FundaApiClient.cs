@@ -20,7 +20,7 @@ public class FundaApiClient : IFundaApiClient
         _concurrencyLimiter = new SemaphoreSlim(maxConcurrent, maxConcurrent);
     }
     
-    public async Task<IEnumerable<RealEstateUnitResponse>> GetRentalPropertiesCountPerAgencyAsync(string city)
+    public async Task<IEnumerable<RealEstateUnitExternalResponse>> GetRentalPropertiesCountPerAgencyAsync(string city)
     {
         var endpoint = $"/feeds/Aanbod.svc/json/76666a29898f491480386d966b75f949/?type=koop&zo=/{city}/";
 
@@ -31,7 +31,7 @@ public class FundaApiClient : IFundaApiClient
             return [];
         }
 
-        var objects = new List<RealEstateUnitResponse>(firstPageResponse.RealEstateUnits);
+        var objects = new List<RealEstateUnitExternalResponse>(firstPageResponse.RealEstateUnits);
         var numberOfPages = firstPageResponse.Pagination?.NumberOfPages ?? 1;
 
         if (numberOfPages == 1)
@@ -39,8 +39,8 @@ public class FundaApiClient : IFundaApiClient
             return objects;
         }
 
-        var pageNumbers = Enumerable.Range(2, (int)numberOfPages).ToList();
-        var concurrentItems = new System.Collections.Concurrent.ConcurrentBag<RealEstateUnitResponse>();
+        var pageNumbers = Enumerable.Range(2, (int)numberOfPages-3).ToList();
+        var concurrentItems = new System.Collections.Concurrent.ConcurrentBag<RealEstateUnitExternalResponse>();
         
         foreach (var realEstateUnit in firstPageResponse.RealEstateUnits)
         {
@@ -70,24 +70,24 @@ public class FundaApiClient : IFundaApiClient
         });
 
         await Task.WhenAll(getTasks);
-        
+
         return concurrentItems.ToList();;
     }
     
-    private async Task<RealEstateUnitsResponse?> GetPageAsync(string endpoint, int page)
+    private async Task<RealEstateUnitsExternalResponse?> GetPageAsync(string endpoint, int page)
     {
         await _rateLimiter.WaitAsync();
         
         try
         {
-            var response = await _httpClient.GetAsync($"{endpoint}&page={page}/");
+            var response = await _httpClient.GetAsync($"{endpoint}&page={page}");
             
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
         
-            var realEstateUnitsResponse = await response.Content.ReadFromJsonAsync<RealEstateUnitsResponse>();
+            var realEstateUnitsResponse = await response.Content.ReadFromJsonAsync<RealEstateUnitsExternalResponse>();
             return realEstateUnitsResponse;
         }
         catch (Exception ex)

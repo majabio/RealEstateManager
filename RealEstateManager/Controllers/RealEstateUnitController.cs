@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using RealEstateManager.Models;
 using RealEstateManager.Services;
 
 namespace RealEstateManager.Controllers;
@@ -13,16 +14,17 @@ public class RealEstateUnitController : ControllerBase
     {
         _realEstateUnitService = realEstateUnitService;
     }
-
+    
+    
     [HttpGet("{city}")]
     public async Task<IActionResult> GetRentalPropertiesCountPerAgency(string city)
     { 
         try
         {
-            var result = await _realEstateUnitService.GetRentalPropertiesCountPerAgencyAsync(city);
-            return Ok();
+            var realEstateUnits = await _realEstateUnitService.GetRentalPropertiesCountPerAgencyAsync(city);
+            return Ok(realEstateUnits.Select(unit => new RealEstateUnitResponse() { AgencyName = unit.AgencyName, NumberOfUnits = unit.NumberOfUnits}));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500, "An error occurred while processing your request.");
         }

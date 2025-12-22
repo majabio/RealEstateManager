@@ -12,12 +12,19 @@ public class RealEstateUnitService : IRealEstateUnitService
         _fundaApiClient = fundaApiClient;
     }
     
-    public async Task<IEnumerable<RealEstateUnitResponse>> GetRentalPropertiesCountPerAgencyAsync(string city)
+    public async Task<IEnumerable<RealEstateUnit>> GetRentalPropertiesCountPerAgencyAsync(string city)
     { 
         try
         {
-            var response = await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(city);
-            return response;
+            var realEstateUnits = await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(city);
+            
+            var sortedUnits = realEstateUnits
+                .GroupBy(unit => unit.AgencyName)
+                .Select(g => new RealEstateUnit(AgencyName: g.Key, NumberOfUnits: (uint)g.Count()))
+                .OrderByDescending(o => o.NumberOfUnits)
+                .ToList();
+            
+            return sortedUnits;
         }
         catch(Exception ex)
         {

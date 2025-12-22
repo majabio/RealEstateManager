@@ -4,6 +4,6 @@ namespace RealEstateManager.Services;
 
 public interface IRealEstateUnitService
 {
-    public Task<IEnumerable<RealEstateUnitResponse>> GetRentalPropertiesCountPerAgencyAsync(string city);
+    public Task<IEnumerable<RealEstateUnit>> GetRentalPropertiesCountPerAgencyAsync(string city);
 
 }

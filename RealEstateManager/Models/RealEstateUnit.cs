@@ -1,3 +1,3 @@
 namespace RealEstateManager.Models;
 
-public record RealEstateUnit(int AgencyId, string AgencyName);
+public record RealEstateUnit(string? AgencyName, uint NumberOfUnits);

@@ -4,5 +4,5 @@ namespace RealEstateManager.Infrastructure;
 
 public interface IFundaApiClient
 {
-    Task<IEnumerable<RealEstateUnitResponse>> GetRentalPropertiesCountPerAgencyAsync(string city);
+    Task<IEnumerable<RealEstateUnitExternalResponse>> GetRentalPropertiesCountPerAgencyAsync(string city);
 }
