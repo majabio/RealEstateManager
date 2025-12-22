@@ -2,18 +2,19 @@ using System.Text.Json.Serialization;
 
 namespace RealEstateManager.Models;
 
-public class RealEstateUnitResponse
+public class RealEstateUnitsResponse
 {
     [JsonPropertyName("Objects")]
-    public ObjectResponse[]? RealEstateUnits { get; set; } 
+    public required RealEstateUnitResponse[] RealEstateUnits { get; set; }
+
     [JsonPropertyName("Paging")]
     public PaginationResponse? Pagination { get; set; }
 }
 
-public class ObjectResponse
+public class RealEstateUnitResponse
 {
     [JsonPropertyName("MakelaarId")]
-    public uint AgencyId { get; set; }
+    public required uint AgencyId { get; set; }
     [JsonPropertyName("MakelaarNaam")]
     public string AgencyName { get; set; } = string.Empty;
 }

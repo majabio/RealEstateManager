@@ -20,7 +20,7 @@ public class RealEstateUnitController : ControllerBase
         try
         {
             var result = await _realEstateUnitService.GetRentalPropertiesCountPerAgencyAsync(city);
-            return Ok(result);
+            return Ok();
         }
         catch (Exception ex)
         {

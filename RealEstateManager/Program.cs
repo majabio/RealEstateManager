@@ -33,8 +33,9 @@ builder.Services.AddSingleton<IFundaApiClient>(serviceProvider =>
 {
     var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
     var rateLimiter = serviceProvider.GetRequiredService<ApiRateLimiter>();
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     
-    return new FundaApiClient(httpClientFactory, rateLimiter); 
+    return new FundaApiClient(httpClientFactory, rateLimiter, configuration); 
 });
 
 builder.Services.AddScoped<IRealEstateUnitService, RealEstateUnitService>();

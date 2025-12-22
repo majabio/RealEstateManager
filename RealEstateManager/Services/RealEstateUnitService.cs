@@ -1,4 +1,5 @@
 using RealEstateManager.Infrastructure;
+using RealEstateManager.Models;
 
 namespace RealEstateManager.Services;
 
@@ -11,11 +12,12 @@ public class RealEstateUnitService : IRealEstateUnitService
         _fundaApiClient = fundaApiClient;
     }
     
-    public async Task<IDictionary<uint, uint>> GetRentalPropertiesCountPerAgencyAsync(string city)
+    public async Task<IEnumerable<RealEstateUnitResponse>> GetRentalPropertiesCountPerAgencyAsync(string city)
     { 
         try
         {
-            return await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(city);
+            var response = await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(city);
+            return response;
         }
         catch(Exception ex)
         {
