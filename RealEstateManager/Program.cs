@@ -1,7 +1,11 @@
+using RealEstateManager;
 using RealEstateManager.Infrastructure;
 using RealEstateManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -32,9 +36,11 @@ builder.Services.AddSingleton<IFundaApiClient>(serviceProvider =>
     
     return new FundaApiClient(httpClientFactory, rateLimiter); 
 });
+
 builder.Services.AddScoped<IRealEstateUnitService, RealEstateUnitService>();
 
 var app = builder.Build();
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

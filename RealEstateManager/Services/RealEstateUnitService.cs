@@ -12,7 +12,7 @@ public class RealEstateUnitService : IRealEstateUnitService
     }
     
     public async Task<IDictionary<uint, uint>> GetRentalPropertiesCountPerAgencyAsync(string city)
-    {
+    { 
         try
         {
             return await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(city);
