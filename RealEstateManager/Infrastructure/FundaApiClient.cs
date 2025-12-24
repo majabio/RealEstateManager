@@ -20,10 +20,13 @@ public class FundaApiClient : IFundaApiClient
         _concurrencyLimiter = new SemaphoreSlim(maxConcurrent, maxConcurrent);
     }
     
-    public async Task<IEnumerable<RealEstateUnitExternalResponse>> GetRentalPropertiesCountPerAgencyAsync(string city)
+    public async Task<IEnumerable<RealEstateUnitExternalResponse>> GetRentalPropertiesCountPerAgencyAsync(string endpoint)
     {
-        var endpoint = $"/feeds/Aanbod.svc/json/76666a29898f491480386d966b75f949/?type=koop&zo=/{city}/";
-
+        return await GetAllPagesAsync(endpoint);
+    }
+    
+    private async Task<IEnumerable<RealEstateUnitExternalResponse>> GetAllPagesAsync(string endpoint)
+    {
         var firstPageResponse = await GetPageAsync(endpoint, 1);
         
         if (firstPageResponse?.RealEstateUnits == null)
@@ -73,7 +76,7 @@ public class FundaApiClient : IFundaApiClient
 
         return concurrentItems.ToList();;
     }
-    
+
     private async Task<RealEstateUnitsExternalResponse?> GetPageAsync(string endpoint, int page)
     {
         await _rateLimiter.WaitAsync();

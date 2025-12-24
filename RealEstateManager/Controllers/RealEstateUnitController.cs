@@ -29,4 +29,18 @@ public class RealEstateUnitController : ControllerBase
             return StatusCode(500, "An error occurred while processing your request.");
         }
     }
+    
+    [HttpGet("{city}/tuin/")]
+    public async Task<IActionResult> GetRentalPropertiesWithGardenCountPerAgency(string city)
+    { 
+        try
+        {
+            var realEstateUnits = await _realEstateUnitService.GetRentalPropertiesCountPerAgencyAsync(city);
+            return Ok(realEstateUnits.Select(unit => new RealEstateUnitResponse() { AgencyName = unit.AgencyName, NumberOfUnits = unit.NumberOfUnits}));
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "An error occurred while processing your request.");
+        }
+    }
 }

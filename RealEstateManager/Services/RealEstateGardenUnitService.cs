@@ -3,22 +3,20 @@ using RealEstateManager.Models;
 
 namespace RealEstateManager.Services;
 
-public class RealEstateUnitService : IRealEstateUnitService
+public class RealEstateGardenUnitService : IRealEstateGardenUnitService
 {
     private readonly IFundaApiClient _fundaApiClient;
 
-    public RealEstateUnitService(IFundaApiClient fundaApiClient)
+    public RealEstateGardenUnitService(IFundaApiClient fundaApiClient)
     {
         _fundaApiClient = fundaApiClient;
     }
     
-    public async Task<IEnumerable<RealEstateUnit>> GetRentalPropertiesCountPerAgencyAsync(string city)
+    public async Task<IEnumerable<RealEstateUnit>> GetRentalPropertiesWithGardenCountPerAgencyAsync(string city)
     { 
-        var endpoint = $"/feeds/Aanbod.svc/json/76666a29898f491480386d966b75f949/?type=koop&zo=/{city}/";
-        
         try
         {
-            var realEstateUnits = await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(endpoint);
+            var realEstateUnits = await _fundaApiClient.GetRentalPropertiesCountPerAgencyAsync(city);
             
             var sortedUnits = realEstateUnits
                 .GroupBy(unit => unit.AgencyName)
@@ -30,7 +28,7 @@ public class RealEstateUnitService : IRealEstateUnitService
         }
         catch(Exception ex)
         {
-            throw new ApplicationException("Error retrieving rental properties count", ex);
+            throw new ApplicationException("Error retrieving rental properties with garden count", ex);
         }
     }
 }
